@@ -74,57 +74,45 @@ public class BasicLine extends GLCanvas implements GLEventListener {
     public void init(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();      // get the OpenGL graphics context
         glu = new GLU();                         // get GL Utilities
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // set background (clear) color
-        gl.glClearDepth(1.0f);      // set clear depth value to farthest
-        gl.glEnable(GL_DEPTH_TEST); // enables depth testing
-        gl.glDepthFunc(GL_LEQUAL);  // the type of depth test to do
-        gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // best perspective correction
-        gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting
-
+        glu.gluOrtho2D(0, CANVAS_WIDTH, 0, CANVAS_HEIGHT);
     }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
-
-        if (height == 0) height = 1;   // prevent divide by zero
-        float aspect = (float)width / height;
-
-        // Set the view port (display area) to cover the entire window
-        gl.glViewport(0, 0, width, height);
-
-        // Setup perspective projection, with aspect ratio matches viewport
-        gl.glMatrixMode(GL_PROJECTION);  // choose projection matrix
-        gl.glLoadIdentity();             // reset projection matrix
-        glu.gluPerspective(45.0, aspect, 0.1, 100.0); // fovy, aspect, zNear, zFar
-
-        // Enable the model-view transform
-        gl.glMatrixMode(GL_MODELVIEW);
-        gl.glLoadIdentity(); // reset
     }
+
 
     @Override
     public void display(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
 
-
-        int i = 0;
+        int x1 = 0, x2 = 50, y1 = 0, y2 = 0;
         float cosine, sine;
 
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
-        gl.glLoadIdentity();  // reset the model-view matrix
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
 
-        // ----- Your OpenGL rendering code here (Render a white triangle for testing) -----
-        gl.glTranslatef(0.0f, 0.0f, -6.0f); // translate into the screen
-        gl.glColor3f(0.0f, 0.0f, 1.0f);
+        float x, y;
+        float a;
+        int i;
 
-        gl.glBegin(GL2.GL_POLYGON);
-        for (i = 0; i<100 ; i++) {
-            cosine = (float) Math.cos(i * 2 * Math.PI/100.0);
-            sine = (float) Math.sin(i * 2 * Math.PI/100.0);
-            gl.glVertex2f(cosine, sine);
+        a = (y2-y1) / (x2-x1);
+        gl.glBegin(GL_POINTS);
+        for (x = x1 ; x<x2 ; x+=1) {
+            y = (int) (y1 + a * (x - x1));
+            gl.glVertex2d(x, y);
         }
         gl.glEnd();
+
+
+        gl.glBegin(GL_POINTS);
+        for(i=0; i<100 ; i++){
+            cosine = (float) Math.cos(i*2*Math.PI/100.0);
+            sine = (float) Math.sin(i*2*Math.PI/100.0);
+            gl.glVertex2f(10+cosine, 10+sine);
+        }
+        gl.glEnd();
+
 
     }
 
