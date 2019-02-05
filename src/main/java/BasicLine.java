@@ -81,15 +81,14 @@ public class BasicLine extends GLCanvas implements GLEventListener {
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     }
 
-    public void drawLine(int x1, int y1, int x2, int y2, GL2 gl) {
+    private void drawLine(int x1, int y1, int x2, int y2, GL2 gl) {
+        double m = (y2 -y1)/((x2 - x1) *1.0);
         int x, y;
-        float a;
 
-        a = (y2-y1) / (x2-x1);
         gl.glBegin(GL_POINTS);
-        for (x = x1 ; x<x2 ; x+=1) {
-            y = (int) (y1 + a * (x - x1));
-            gl.glVertex2d(x, y);
+        for (x = x1; x<x2 ; x++) {
+            y = (int) (y1 + m*(x-x1));
+            gl.glVertex2i(x, y);
         }
         gl.glEnd();
     }
@@ -198,6 +197,15 @@ public class BasicLine extends GLCanvas implements GLEventListener {
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
         gl.glColor3f(1.0f, 1.0f, 1.0f);
 
+        /*
+        *  x1 = 100
+        *  x2 = 450
+        *
+        *  y1 = 50
+        *  y2 = 750
+        *
+        * */
+
         // Edges
         drawLineBresenham(100, 100, 100, 700, gl);
         drawLineBresenham(450, 100, 450, 700, gl);
@@ -208,9 +216,51 @@ public class BasicLine extends GLCanvas implements GLEventListener {
         drawLineBresenham(100, 400, 450, 400, gl );
         circleBres(275, 400, 50, gl, 0, false);
 
-        // Top and Down
-        drawLineBresenham(100, 125,450, 125, gl );
+        drawLineBresenham(100, 475,450, 475, gl );
+        circleBres(200, 460, 1, gl, 0, false);
+        circleBres(350, 460, 1, gl, 0, false);
+
+        drawLineBresenham(100, 325,450, 325, gl );
+        circleBres(200, 340, 1, gl, 0, false);
+        circleBres(350, 340, 1, gl, 0, false);
+
+        // Top
         drawLineBresenham(100, 675,450, 675, gl );
+        circleBres(275, 675, 15, gl, 3, true);
+        circleBres(275, 675, 15, gl, 4, true);
+
+        circleBres(200, 600, 45, gl, 0, false);
+        circleBres(200, 600, 1, gl, 0, false);
+        drawLineBresenham(145, 607,155, 607, gl );
+        drawLineBresenham(145, 593,155, 593, gl );
+        drawLineBresenham(245, 607,255, 607, gl );
+        drawLineBresenham(245, 593,255, 593, gl );
+
+        circleBres(350, 600, 45, gl, 0, false);
+        circleBres(350, 600, 1, gl, 0, false);
+        drawLineBresenham(295, 607,305, 607, gl );
+        drawLineBresenham(295, 593,305, 593, gl );
+        drawLineBresenham(395, 607,405, 607, gl );
+        drawLineBresenham(395, 593,405, 593, gl );
+
+        // Down
+        drawLineBresenham(100, 125,450, 125, gl );
+        circleBres(275, 125, 15, gl, 1, true);
+        circleBres(275, 125, 15, gl, 2, true);
+
+        circleBres(200, 215, 45, gl, 0, false);
+        circleBres(200, 215, 1, gl, 0, false);
+        drawLineBresenham(145, 222,155, 222, gl );
+        drawLineBresenham(145, 208,155, 208, gl );
+        drawLineBresenham(245, 222,255, 222, gl );
+        drawLineBresenham(245, 208,255, 208, gl );
+
+        circleBres(350, 215, 45, gl, 0, false);
+        circleBres(350, 215, 1, gl, 0, false);
+        drawLineBresenham(295, 222,305, 222, gl );
+        drawLineBresenham(295, 208,305, 208, gl );
+        drawLineBresenham(395, 222,405, 222, gl );
+        drawLineBresenham(395, 208,405, 208, gl );
 
         // Rounded edges
         circleBres(400, 700, 50, gl, 1, true);
