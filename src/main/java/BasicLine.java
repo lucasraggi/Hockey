@@ -138,25 +138,44 @@ public class BasicLine extends GLCanvas implements GLEventListener {
         gl.glEnd();
     }
 
-    private void drawCircle(int xc, int yc, int x, int y, GL2 gl)
-    {
+    private void drawCircle(int xc, int yc, int x, int y, GL2 gl, int quadrant, boolean part) {
         gl.glBegin(GL_POINTS);
-            gl.glVertex2d(xc+x, yc+y);
-            gl.glVertex2d(xc-x, yc+y);
-            gl.glVertex2d(xc+x, yc-y);
-            gl.glVertex2d(xc-x, yc-y);
-            gl.glVertex2d(xc+y, yc+x);
-            gl.glVertex2d(xc-y, yc+x);
-            gl.glVertex2d(xc+y, yc-x);
-            gl.glVertex2d(xc-y, yc-x);
+        if (part){
+            if (quadrant == 1) {
+                gl.glVertex2d(xc + x, yc + y);
+                gl.glVertex2d(xc + y, yc + x);
+
+            } else if (quadrant == 2) {
+                gl.glVertex2d(xc - x, yc + y);
+                gl.glVertex2d(xc - y, yc + x);
+
+            } else if (quadrant == 3) {
+                gl.glVertex2d(xc - x, yc - y);
+                gl.glVertex2d(xc - y, yc - x);
+
+            } else if (quadrant == 4) {
+                gl.glVertex2d(xc + y, yc - x);
+                gl.glVertex2d(xc + x, yc - y);
+            }
+        } else {
+
+            gl.glVertex2d(xc + x, yc + y);
+            gl.glVertex2d(xc + y, yc + x);
+            gl.glVertex2d(xc - x, yc + y);
+            gl.glVertex2d(xc - y, yc + x);
+            gl.glVertex2d(xc - x, yc - y);
+            gl.glVertex2d(xc - y, yc - x);
+            gl.glVertex2d(xc + y, yc - x);
+            gl.glVertex2d(xc + x, yc - y);
+
+        }
         gl.glEnd();
     }
 
-    private void circleBres(int xc, int yc, int r, GL2 gl)
-    {
+    private void circleBres(int xc, int yc, int r, GL2 gl, int quadrant, boolean part) {
         int x = 0, y = r;
         int d = 3 - 2 * r;
-        drawCircle(xc, yc, x, y, gl);
+        drawCircle(xc, yc, x, y, gl, quadrant, part);
 
         while (y >= x) {
             x++;
@@ -168,7 +187,7 @@ public class BasicLine extends GLCanvas implements GLEventListener {
             else
                 d = d + 4 * x + 6;
 
-            drawCircle(xc, yc, x, y, gl);
+            drawCircle(xc, yc, x, y, gl, quadrant, part);
         }
     }
 
@@ -180,19 +199,24 @@ public class BasicLine extends GLCanvas implements GLEventListener {
         gl.glColor3f(1.0f, 1.0f, 1.0f);
 
         // Edges
-        drawLineBresenham(100, 50, 100, 650, gl);
-        drawLineBresenham(450, 50, 450, 650, gl);
-        drawLineBresenham(100, 650, 450, 650, gl);
-        drawLineBresenham(100, 50, 450, 50, gl);
+        drawLineBresenham(100, 100, 100, 700, gl);
+        drawLineBresenham(450, 100, 450, 700, gl);
+        drawLineBresenham(150, 750, 400, 750, gl);
+        drawLineBresenham(150, 50, 400, 50, gl);
 
         // Center
-        drawLineBresenham(100, 350, 450, 350, gl );
+        drawLineBresenham(100, 400, 450, 400, gl );
+        circleBres(275, 400, 50, gl, 0, false);
 
         // Top and Down
         drawLineBresenham(100, 125,450, 125, gl );
-        drawLineBresenham(100, 575,450, 575, gl );
+        drawLineBresenham(100, 675,450, 675, gl );
 
-        circleBres(275, 350, 50, gl);
+        // Rounded edges
+        circleBres(400, 700, 50, gl, 1, true);
+        circleBres(150, 700, 50, gl, 2, true);
+        circleBres(150, 100, 50, gl, 3, true);
+        circleBres(400, 100, 50, gl, 4, true);
 
     }
 
