@@ -20,13 +20,12 @@ import static com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
 import static com.jogamp.opengl.fixedfunc.GLMatrixFunc.*;
 
 public class BasicLine extends GLCanvas implements GLEventListener {
-    // Define constants for the top-level container
+
     private static String TITLE = "JOGL 2.0 Setup (GLCanvas)";  // window's title
     private static final int CANVAS_WIDTH = 640;  // width of the drawable
     private static final int CANVAS_HEIGHT = 480; // height of the drawable
     private static final int FPS = 60; // animator's target frames per second
 
-    /** The entry main() method to setup the top-level container and animator */
     public static void main(String[] args) {
         // Run the GUI codes in the event-dispatching thread for thread safety
         SwingUtilities.invokeLater(new Runnable() {
@@ -64,21 +63,13 @@ public class BasicLine extends GLCanvas implements GLEventListener {
         });
     }
 
-    // Setup OpenGL Graphics Renderer
+    private GLU glu;
 
-    private GLU glu;  // for the GL Utility
 
-    /** Constructor to setup the GUI for this Component */
     public BasicLine() {
         this.addGLEventListener(this);
     }
 
-    // ------ Implement methods declared in GLEventListener ------
-
-    /**
-     * Called back immediately after the OpenGL context is initialized. Can be used
-     * to perform one-time initialization. Run only once.
-     */
     @Override
     public void init(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();      // get the OpenGL graphics context
@@ -90,13 +81,8 @@ public class BasicLine extends GLCanvas implements GLEventListener {
         gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // best perspective correction
         gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting
 
-        // ----- Your OpenGL initialization code here -----
     }
 
-    /**
-     * Call-back handler for window re-size event. Also called when the drawable is
-     * first set to visible.
-     */
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
@@ -117,34 +103,31 @@ public class BasicLine extends GLCanvas implements GLEventListener {
         gl.glLoadIdentity(); // reset
     }
 
-    /**
-     * Called back by the animator to perform rendering.
-     */
     @Override
     public void display(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
+
+
+        int i = 0;
+        float cosine, sine;
+
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
         gl.glLoadIdentity();  // reset the model-view matrix
 
         // ----- Your OpenGL rendering code here (Render a white triangle for testing) -----
         gl.glTranslatef(0.0f, 0.0f, -6.0f); // translate into the screen
-        gl.glBegin (GL2.GL_LINES);//static field
-            gl.glColor3f(1.0f, 0.0f, 0.0f);
-            gl.glVertex3f(1.50f,-0.50f,0);
-            gl.glVertex3f(-0.50f,1.50f,0);
-        gl.glEnd();
         gl.glColor3f(0.0f, 0.0f, 1.0f);
-        gl.glBegin(GL_QUADS); // draw using triangles
-            gl.glVertex3f(-1.0f, 1.0f, 0.0f);
-            gl.glVertex3f(-1.0f, -1.0f, 0.0f);
-            gl.glVertex3f(1.0f, -1.0f, 0.0f);
-            gl.glVertex3f(1.0f, 1.0f, 0.0f);
+
+        gl.glBegin(GL2.GL_POLYGON);
+        for (i = 0; i<100 ; i++) {
+            cosine = (float) Math.cos(i * 2 * Math.PI/100.0);
+            sine = (float) Math.sin(i * 2 * Math.PI/100.0);
+            gl.glVertex2f(cosine, sine);
+        }
         gl.glEnd();
+
     }
 
-    /**
-     * Called back before the OpenGL context is destroyed. Release resource such as buffers.
-     */
     @Override
     public void dispose(GLAutoDrawable drawable) { }
 }
