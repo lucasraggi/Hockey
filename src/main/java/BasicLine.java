@@ -23,7 +23,7 @@ public class BasicLine extends GLCanvas implements GLEventListener {
 
     private static String TITLE = "JOGL 2.0 Setup (GLCanvas)";  // window's title
     private static final int CANVAS_WIDTH = 640;  // width of the drawable
-    private static final int CANVAS_HEIGHT = 480; // height of the drawable
+    private static final int CANVAS_HEIGHT = 780; // height of the drawable
     private static final int FPS = 60; // animator's target frames per second
 
     public static void main(String[] args) {
@@ -81,20 +81,9 @@ public class BasicLine extends GLCanvas implements GLEventListener {
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     }
 
-
-    @Override
-    public void display(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
-
-        int x1 = 0, x2 = 50, y1 = 0, y2 = 0;
-        float cosine, sine;
-
-        gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
-
-        float x, y;
+    public void drawLine(int x1, int y1, int x2, int y2, GL2 gl) {
+        int x, y;
         float a;
-        int i;
 
         a = (y2-y1) / (x2-x1);
         gl.glBegin(GL_POINTS);
@@ -103,16 +92,107 @@ public class BasicLine extends GLCanvas implements GLEventListener {
             gl.glVertex2d(x, y);
         }
         gl.glEnd();
+    }
 
+    private void drawLineBresenham(int x1, int y1, int x2, int y2, GL2 gl) {
+        // delta of exact value and rounded value of the dependent variable
+        int d = 0;
 
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+
+        int dx2 = 2 * dx; // slope scaling factors to
+        int dy2 = 2 * dy; // avoid floating point
+
+        int ix = x1 < x2 ? 1 : -1; // increment direction
+        int iy = y1 < y2 ? 1 : -1;
+
+        int x = x1;
+        int y = y1;
         gl.glBegin(GL_POINTS);
-        for(i=0; i<100 ; i++){
-            cosine = (float) Math.cos(i*2*Math.PI/100.0);
-            sine = (float) Math.sin(i*2*Math.PI/100.0);
-            gl.glVertex2f(10+cosine, 10+sine);
+        if (dx >= dy) {
+            while (true) {
+                gl.glVertex2d(x, y);
+                if (x == x2)
+                    break;
+                x += ix;
+                d += dy2;
+                if (d > dx) {
+                    y += iy;
+                    d -= dx2;
+                }
+            }
+        } else {
+            while (true) {
+                gl.glVertex2d(x, y);
+                if (y == y2)
+                    break;
+                y += iy;
+                d += dx2;
+                if (d > dy) {
+                    x += ix;
+                    d -= dy2;
+                }
+            }
         }
         gl.glEnd();
+    }
 
+    private void drawCircle(int xc, int yc, int x, int y, GL2 gl)
+    {
+        gl.glBegin(GL_POINTS);
+            gl.glVertex2d(xc+x, yc+y);
+            gl.glVertex2d(xc-x, yc+y);
+            gl.glVertex2d(xc+x, yc-y);
+            gl.glVertex2d(xc-x, yc-y);
+            gl.glVertex2d(xc+y, yc+x);
+            gl.glVertex2d(xc-y, yc+x);
+            gl.glVertex2d(xc+y, yc-x);
+            gl.glVertex2d(xc-y, yc-x);
+        gl.glEnd();
+    }
+
+    private void circleBres(int xc, int yc, int r, GL2 gl)
+    {
+        int x = 0, y = r;
+        int d = 3 - 2 * r;
+        drawCircle(xc, yc, x, y, gl);
+
+        while (y >= x) {
+            x++;
+
+            if (d > 0) {
+                y--;
+                d = d + 4 * (x - y) + 10;
+            }
+            else
+                d = d + 4 * x + 6;
+
+            drawCircle(xc, yc, x, y, gl);
+        }
+    }
+
+    @Override
+    public void display(GLAutoDrawable drawable) {
+        GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
+
+        gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+
+        // Edges
+        drawLineBresenham(100, 50, 100, 650, gl);
+        drawLineBresenham(450, 50, 450, 650, gl);
+        drawLineBresenham(100, 650, 450, 650, gl);
+        drawLineBresenham(100, 50, 450, 50, gl);
+
+        // Center
+        drawLineBresenham(100, 350, 450, 350, gl );
+
+        // Top and Down
+        drawLineBresenham(100, 125,450, 125, gl );
+        drawLineBresenham(100, 575,450, 575, gl );
+
+        circleBres(275, 350, 50, gl);
 
     }
 
