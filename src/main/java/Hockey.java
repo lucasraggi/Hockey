@@ -29,7 +29,10 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
     private ArrayList<Line> lines = new ArrayList<>();
     private Drawer dw = new Bresenham();
     private GLU glu;
-    private float thickness = 1;
+
+    private static float thickness = 1;
+    private static int algorithimSelected = 1;
+    private static float red = 1, green = 1, blue = 1;
 
 
 
@@ -102,7 +105,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if(retaButton.isSelected()){
-
+                            algorithimSelected = 0;
                         }
                     }
                 });
@@ -111,7 +114,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if(bressButton.isSelected()){
-
+                            algorithimSelected = 1;
                         }
                     }
                 });
@@ -123,7 +126,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
                 espessura.addChangeListener(new ChangeListener() {
                     @Override
                     public void stateChanged(ChangeEvent e) {
-
+                        thickness = espessura.getValue();
                     }
                 });
 
@@ -144,6 +147,9 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
 
                         if(color != null) {
                             botaoCor.setBackground(color);
+                            red = color.getRed()/255;
+                            green = color.getGreen()/255;
+                            blue = color.getBlue()/255;
                         }
                     }
                 });
@@ -189,8 +195,13 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
         GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
 
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
+        gl.glColor3f(red, green, blue);
         gl.glPointSize(this.thickness);
+
+        if (algorithimSelected == 0)
+            dw = new Bresenham();
+        else
+            dw = new Naive();
 
         /*
         *  x1 = 100
