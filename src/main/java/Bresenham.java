@@ -5,7 +5,11 @@ import static com.jogamp.opengl.GL.GL_POINTS;
 public class Bresenham extends Drawer {
 
     @Override
-    void drawLine(int x1, int y1, int x2, int y2, GL2 gl) {
+    void drawLine(int x1, int y1, int x2, int y2, GL2 gl, boolean field) {
+        if(field) {
+            x1 = x1 + 780 - 370;
+            x2 = x2 + 780 - 370;
+        }
         int d = 0;
 
         int dx = Math.abs(x2 - x1);
@@ -49,7 +53,10 @@ public class Bresenham extends Drawer {
     }
 
     @Override
-    void drawCircle(int xc, int yc, int r, GL2 gl, int quadrant, boolean part) {
+    void drawCircle(int xc, int yc, int r, GL2 gl, int quadrant, boolean part, boolean field) {
+        if(field) {
+            xc = xc + 780 - 370;
+        }
         int x = 0, y = r;
         int d = 3 - 2 * r;
         circle(xc, yc, x, y, gl, quadrant, part);

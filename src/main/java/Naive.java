@@ -4,7 +4,11 @@ import static com.jogamp.opengl.GL.GL_POINTS;
 
 public class Naive extends Drawer {
     @Override
-    void drawLine(int x1, int y1, int x2, int y2, GL2 gl) {
+    void drawLine(int x1, int y1, int x2, int y2, GL2 gl, boolean field) {
+        if(field) {
+            x1 = x1 + 780 - 370;
+            x2 = x2 + 780 - 370;
+        }
         boolean inverted = Math.abs(y2 - y1) > Math.abs(x2 - x1);
 
         if (inverted) {
@@ -32,7 +36,10 @@ public class Naive extends Drawer {
     }
 
     @Override
-    void drawCircle(int x, int y, int r, GL2 gl, int quadrant, boolean part) {
+    void drawCircle(int x, int y, int r, GL2 gl, int quadrant, boolean part, boolean field) {
+        if(field) {
+            x = x + 780 - 370;
+        }
         int Frac_Circ = 400;
         double xx, yy,xxx, yyy;
         gl.glBegin(GL_POINTS);

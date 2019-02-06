@@ -31,7 +31,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
     private GLU glu;
 
     private static float thickness = 1;
-    private static int algorithimSelected = 1;
+    private static int algorithimSelected = 0;
     private static float red = 1, green = 1, blue = 1;
 
 
@@ -39,24 +39,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        y = Math.abs(y - CANVAS_HEIGHT);
 
-
-
-
-        if(firstClickX == -1 && firstClickY == -1){
-            firstClickX = x;
-            firstClickY = y;
-        }
-        else {
-            lines.add(new Line(firstClickX, firstClickY, x, y));
-            //System.out.println("Received: x1: "+ firstClickX + " y1:" + firstClickY + " x2:" + x + " y2:" + y);
-            firstClickX = -1;
-            firstClickY = -1;
-
-        }
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -198,8 +181,9 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
         gl.glColor3f(red, green, blue);
         gl.glPointSize(this.thickness);
 
-        if (algorithimSelected == 0)
+        if (algorithimSelected == 1) {
             dw = new Bresenham();
+        }
         else
             dw = new Naive();
 
@@ -213,75 +197,77 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
         * */
         Line debug = new Line(0,0,0,0);
         for (Line line : lines) {
-            dw.drawLine(line.x1, line.y1, line.x2, line.y2, gl);
+            dw.drawLine(line.x1, line.y1, line.x2, line.y2, gl, false);
             debug = line;
         }
+        if(firstClickX != -1)
+            System.out.println(" x1: " + debug.x1 +" y1: " +  debug.y1 +" x2: " +  debug.x2 +" y2: " +  debug.y2);
         //if (firstClickX != -1)
             //System.out.println("Processed: x1: "+ debug.x1 + " y1:" + debug.y1 + " x2:" +debug.x2 + " y2:" + debug.y2);
 
 
 
         // Edges
-        dw.drawLine(100, 100, 100, 700, gl);
-        dw.drawLine(450, 100, 450, 700, gl);
-        dw.drawLine(150, 750, 400, 750, gl);
-        dw.drawLine(150, 50, 400, 50, gl);
+        dw.drawLine(100, 100, 100, 700, gl, true);
+        dw.drawLine(450, 100, 450, 700, gl, true);
+        dw.drawLine(150, 750, 400, 750, gl, true);
+        dw.drawLine(150, 50, 400, 50, gl, true);
 
         // Center
-        dw.drawLine(100, 400, 450, 400, gl );
-        dw.drawCircle(275, 400, 50, gl, 0, false);
+        dw.drawLine(100, 400, 450, 400, gl , true);
+        dw.drawCircle(275, 400, 50, gl, 0, false, true);
 
-        dw.drawLine(100, 475,450, 475, gl );
-        dw.drawCircle(200, 460, 1, gl, 0, false);
-        dw.drawCircle(350, 460, 1, gl, 0, false);
+        dw.drawLine(100, 475,450, 475, gl , true);
+        dw.drawCircle(200, 460, 1, gl, 0, false, true);
+        dw.drawCircle(350, 460, 1, gl, 0, false, true);
 
-        dw.drawLine(100, 325,450, 325, gl );
-        dw.drawCircle(200, 340, 1, gl, 0, false);
-        dw.drawCircle(350, 340, 1, gl, 0, false);
+        dw.drawLine(100, 325,450, 325, gl , true);
+        dw.drawCircle(200, 340, 1, gl, 0, false, true);
+        dw.drawCircle(350, 340, 1, gl, 0, false, true);
 
         // Top
-        dw.drawLine(100, 675,450, 675, gl );
-        dw.drawCircle(275, 675, 15, gl, 3, true);
-        dw.drawCircle(275, 675, 15, gl, 4, true);
+        dw.drawLine(100, 675,450, 675, gl , true);
+        dw.drawCircle(275, 675, 15, gl, 3, true, true);
+        dw.drawCircle(275, 675, 15, gl, 4, true, true);
 
-        dw.drawCircle(200, 600, 45, gl, 0, false);
-        dw.drawCircle(200, 600, 1, gl, 0, false);
-        dw.drawLine(145, 607,155, 607, gl );
-        dw.drawLine(145, 593,155, 593, gl );
-        dw.drawLine(245, 607,255, 607, gl );
-        dw.drawLine(245, 593,255, 593, gl );
+        dw.drawCircle(200, 600, 45, gl, 0, false, true);
+        dw.drawCircle(200, 600, 1, gl, 0, false, true);
+        dw.drawLine(145, 607,155, 607, gl , true);
+        dw.drawLine(145, 593,155, 593, gl , true);
+        dw.drawLine(245, 607,255, 607, gl , true);
+        dw.drawLine(245, 593,255, 593, gl , true);
 
-        dw.drawCircle(350, 600, 45, gl, 0, false);
-        dw.drawCircle(350, 600, 1, gl, 0, false);
-        dw.drawLine(295, 607,305, 607, gl );
-        dw.drawLine(295, 593,305, 593, gl );
-        dw.drawLine(395, 607,405, 607, gl );
-        dw.drawLine(395, 593,405, 593, gl );
+        dw.drawCircle(350, 600, 45, gl, 0, false, true);
+        dw.drawCircle(350, 600, 1, gl, 0, false, true);
+        dw.drawLine(295, 607,305, 607, gl , true);
+        dw.drawLine(295, 593,305, 593, gl , true);
+        dw.drawLine(395, 607,405, 607, gl , true);
+        dw.drawLine(395, 593,405, 593, gl , true);
 
         // Down
-        dw.drawLine(100, 125,450, 125, gl );
-        dw.drawCircle(275, 125, 15, gl, 1, true);
-        dw.drawCircle(275, 125, 15, gl, 2, true);
+        dw.drawLine(100, 125,450, 125, gl , true);
+        dw.drawCircle(275, 125, 15, gl, 1, true, true);
+        dw.drawCircle(275, 125, 15, gl, 2, true, true);
 
-        dw.drawCircle(200, 215, 45, gl, 0, false);
-        dw.drawCircle(200, 215, 1, gl, 0, false);
-        dw.drawLine(145, 222,155, 222, gl );
-        dw.drawLine(145, 208,155, 208, gl );
-        dw.drawLine(245, 222,255, 222, gl );
-        dw.drawLine(245, 208,255, 208, gl );
+        dw.drawCircle(200, 215, 45, gl, 0, false, true);
+        dw.drawCircle(200, 215, 1, gl, 0, false, true);
+        dw.drawLine(145, 222,155, 222, gl , true);
+        dw.drawLine(145, 208,155, 208, gl , true);
+        dw.drawLine(245, 222,255, 222, gl , true);
+        dw.drawLine(245, 208,255, 208, gl , true);
 
-        dw.drawCircle(350, 215, 45, gl, 0, false);
-        dw.drawCircle(350, 215, 1, gl, 0, false);
-        dw.drawLine(295, 222,305, 222, gl );
-        dw.drawLine(295, 208,305, 208, gl );
-        dw.drawLine(395, 222,405, 222, gl );
-        dw.drawLine(395, 208,405, 208, gl );
+        dw.drawCircle(350, 215, 45, gl, 0, false, true);
+        dw.drawCircle(350, 215, 1, gl, 0, false, true);
+        dw.drawLine(295, 222,305, 222, gl , true);
+        dw.drawLine(295, 208,305, 208, gl , true);
+        dw.drawLine(395, 222,405, 222, gl , true);
+        dw.drawLine(395, 208,405, 208, gl , true);
 
         // Rounded edges
-        dw.drawCircle(400, 700, 50, gl, 1, true);
-        dw.drawCircle(150, 700, 50, gl, 2, true);
-        dw.drawCircle(150, 100, 50, gl, 3, true);
-        dw.drawCircle(400, 100, 50, gl, 4, true);
+        dw.drawCircle(400, 700, 50, gl, 1, true, true);
+        dw.drawCircle(150, 700, 50, gl, 2, true, true);
+        dw.drawCircle(150, 100, 50, gl, 3, true, true);
+        dw.drawCircle(400, 100, 50, gl, 4, true, true);
 
     }
 
@@ -298,6 +284,21 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
 
     @Override
     public void mousePressed(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        y = Math.abs(y - CANVAS_HEIGHT);
+        System.out.println("x: " + x + " y: " + y);
+        if(firstClickX == -1 && firstClickY == -1){
+            firstClickX = x;
+            firstClickY = y;
+        }
+        else {
+            lines.add(new Line(firstClickX, firstClickY, x, y));
+            //System.out.println("Received: x1: "+ firstClickX + " y1:" + firstClickY + " x2:" + x + " y2:" + y);
+            firstClickX = -1;
+            firstClickY = -1;
+
+        }
     }
 
     @Override
