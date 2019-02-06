@@ -29,6 +29,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
     private ArrayList<Line> lines = new ArrayList<>();
     private Drawer dw = new Bresenham();
     private GLU glu;
+    private float thickness = 1;
 
 
 
@@ -189,6 +190,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
 
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
         gl.glColor3f(1.0f, 1.0f, 1.0f);
+        gl.glPointSize(this.thickness);
 
         /*
         *  x1 = 100
