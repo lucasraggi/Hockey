@@ -30,7 +30,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
     private Drawer dw = new Bresenham();
     private GLU glu;
 
-    
+
 
 
     @Override
