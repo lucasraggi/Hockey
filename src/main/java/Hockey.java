@@ -21,6 +21,7 @@ public class Hockey extends GLCanvas implements GLEventListener {
     private static final int FPS = 60; // animator's target frames per second
     private Drawer dw = new Bresenham();
     private GLU glu;
+    private float thickness = 1;
 
     public static void main(String[] args) {
         // Run the GUI codes in the event-dispatching thread for thread safety
@@ -80,6 +81,7 @@ public class Hockey extends GLCanvas implements GLEventListener {
 
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
         gl.glColor3f(1.0f, 1.0f, 1.0f);
+        gl.glPointSize(this.thickness);
 
         /*
         *  x1 = 100
